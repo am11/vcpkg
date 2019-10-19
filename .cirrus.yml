@@ -1,0 +1,19 @@
+freebsd_instance:
+  image_family: freebsd-12-0
+
+freebsd_build_task:
+  env:
+    PATH: /usr/local/lib:${PATH}
+
+  prepare_script:
+#    - echo $PATH
+#    - find / -name pkg-static
+#    - /usr/local/sbin/pkg-static install -f pkg
+#    - find / -name libssl*
+#    - pkg upgrade -fy
+    - pkg install -y gcc
+    - echo $PATH
+    - ./bootstrap-vcpkg.sh
+
+  build_script:
+  #  - .\vcpkg integrate install

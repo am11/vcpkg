@@ -76,6 +76,8 @@ vcpkgCheckEqualFileHash()
 
     if command -v "sha512sum" >/dev/null 2>&1 ; then
         actualHash=$(sha512sum "$filePath")
+    elif command -v "sha512" >/dev/null 2>&1 ; then
+        actualHash=$(sha512 -r "$filePath")
     else
         # sha512sum is not available by default on osx
         # shasum is not available by default on Fedora
@@ -116,6 +118,9 @@ vcpkgExtractArchive()
     if [ "$archiveType" = "zip" ]; then
         vcpkgCheckRepoTool "unzip"
         $(cd "$toPath.partial" && unzip -qqo "$archive")
+    elif [ "$archiveType" = "txz" ]; then
+        vcpkgCheckRepoTool "tar"
+        $(cd "$toPath.partial" && tar Jxvf "$archive")
     else
         vcpkgCheckRepoTool "tar"
         $(cd "$toPath.partial" && tar xzf "$archive")
@@ -201,21 +206,26 @@ selectCXX()
 {
     __output=$1
 
-    if [ "x$CXX" = "x" ]; then
+    if [ -z "$CXX" ]; then
         CXX=g++
-        if which g++-9 >/dev/null 2>&1; then
+        if command -v g++-9 >/dev/null 2>&1; then
             CXX=g++-9
-        elif which g++-8 >/dev/null 2>&1; then
+        elif command -v g++-8 >/dev/null 2>&1; then
             CXX=g++-8
-        elif which g++-7 >/dev/null 2>&1; then
+        elif command -v g++-7 >/dev/null 2>&1; then
             CXX=g++-7
-        elif which g++-6 >/dev/null 2>&1; then
+        elif command -v g++-6 >/dev/null 2>&1; then
             CXX=g++-6
         fi
     fi
 
+sudo find / -name "g++*"
+sudo find / -name "gcc*"
+echo "00"
     gccversion="$("$CXX" -v 2>&1)"
+echo "11"
     gccversion="$(extractStringBetweenDelimiters "$gccversion" "gcc version " ".")"
+echo "22 - $gccversion -- $("$CXX" -v 2>&1)"
     if [ "$gccversion" -lt "6" ]; then
         echo "CXX ($CXX) is too old; please install a newer compiler such as g++-7."
         echo "On Ubuntu try the following:"
@@ -228,7 +238,7 @@ selectCXX()
         echo "  scl enable devtoolset-7 bash"
         return 1
     fi
-
+echo "33"
     eval $__output="'$CXX'"
 }
 
@@ -241,6 +251,9 @@ if $vcpkgUseSystem; then
 else
     fetchTool "cmake" "$UNAME" cmakeExe || exit 1
     fetchTool "ninja" "$UNAME" ninjaExe || exit 1
+    if [ "$os" = "freebsd" ]; then
+        fetchTool "libarchive" "$UNAME" libarchive || exit 1
+    fi
 fi
 if [ "$os" = "osx" ]; then
     if [ "$vcpkgAllowAppleClang" = "true" ] ; then

@@ -22,11 +22,18 @@
         <archiveName>cmake-3.14.0-Linux-x86_64.tar.gz</archiveName>
     </tool>
     <tool name="cmake" os="freebsd">
-        <version>3.12.4</version>
-        <exeRelativePath>cmake-3.12.4-FreeBSD-x86_64/bin/cmake</exeRelativePath>
-        <url>https://github.com/ivysnow/CMake/releases/download/v3.12.4/cmake-3.12.4-FreeBSD-x86_64.tar.gz</url>
-        <sha512>b5aeb2de36f3c29757c9404e33756da88580ddfa07f29079c7f275ae0d6d018fdfe3f55d54d1403f38e359865cf93436e084c6b1ea91f26c88bc01dde3793479</sha512>
-        <archiveName>cmake-3.12.4-FreeBSD-x86_64.tar.gz</archiveName>
+        <version>3.15.4</version>
+        <exeRelativePath>usr/local/bin/cmake</exeRelativePath>
+        <url>http://pkg.freebsd.org/freebsd:12:x86:64/latest/All/cmake-3.15.4.txz</url>
+        <sha512>0f9e8cd3d8a30e1587016ed48a4ff32680d6f95ceaa686d1a5226550b810dd37771f6ae65f7d29bea73e192bf7829ec9b896759a13a31d11a8ab7f34f17c8adf</sha512>
+        <archiveName>cmake-3.15.4.txz</archiveName>
+    </tool>
+    <tool name="libarchive" os="freebsd">
+        <version>3.4.0</version>
+        <exeRelativePath>usr/local/lib/libarchive.so</exeRelativePath>
+        <url>http://pkg.freebsd.org/freebsd:12:x86:64/latest/All/libarchive-3.4.0,1.txz</url>
+        <sha512>4dc459483c800cee30596e25f2c8b83eb00e2c9f6c635be60ee4e5031caf3a5f878aa60f6a68e308bfbff4e00e25667c231edd915482671b58886cd7d6929e6e</sha512>
+        <archiveName>libarchive-3.4.0,1.txz</archiveName>
     </tool>
     <tool name="git" os="windows">
         <version>2.21.0-1</version>
