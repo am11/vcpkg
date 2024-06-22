@@ -59,6 +59,7 @@ vcpkg_cmake_configure(
         "-DCLR_CMAKE_TARGET_ARCH_${ARCH_NAME}=1"
         "-DCLR_CMAKE_TARGET_ARCH=${RID_ARCH}"
         "-DCLR_CMAKE_HOST_ARCH=${RID_ARCH}"
+        "$<$<STREQUAL:${VCPKG_LIBRARY_LINKAGE},static>:-DNETHOST_USE_AS_STATIC>"
     MAYBE_UNUSED_VARIABLES
         SKIP_VERSIONING # only used on WIN32
 )
@@ -70,12 +71,6 @@ vcpkg_copy_pdbs()
 vcpkg_cmake_config_fixup(PACKAGE_NAME unofficial-nethost)
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
-
-if(VCPKG_LIBRARY_LINKAGE STREQUAL "static")
-    vcpkg_replace_string("${CURRENT_PACKAGES_DIR}/include/nethost.h" "#ifdef NETHOST_USE_AS_STATIC" "#if 1")
-else()
-    vcpkg_replace_string("${CURRENT_PACKAGES_DIR}/include/nethost.h" "#ifdef NETHOST_USE_AS_STATIC" "#if 0")
-endif()
 
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE.TXT")
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
